@@ -1,0 +1,41 @@
+<!-- timeline.component.html -->
+<style>
+
+.card {
+  margin: auto;
+  margin-top: 100px;
+  max-width: 700px;
+  max-height: 400px; /* Adjust the maximum height as needed */
+  overflow-y: auto;
+}
+</style>
+<div class="card">
+    <div class="card-body">
+        <ul class="clr-timeline clr-timeline-vertical">
+
+          <li class="clr-timeline-step" *ngFor="let step of progress; let i = index">
+            <div class="clr-timeline-step-header">{{ step.time }}</div>
+            <cds-icon [attr.shape]="step.completed ? 'success-standard' : 'circle'" aria-label="Step Status"></cds-icon>
+
+            <div class="clr-timeline-step-body">
+              <span class="clr-timeline-step-title">{{ step.title }}</span>
+              <span class="clr-timeline-step-description">{{ step.description }}</span>
+              <button *ngIf="areAllSubstepsCompleted(step) && isFirstUncompletedStep(i)" class="btn btn-sm" (click)="completeStep(i)">Complete</button>
+            </div>
+
+            <!-- Nested timeline for substeps -->
+            <ul class="clr-timeline clr-timeline-vertical">
+              <li class="clr-timeline-step" *ngFor="let substep of step.substeps; let j = index">
+                <div class="clr-timeline-step-body">
+                  <span class="clr-timeline-step-description">{{ substep.description }}</span>
+                  <cds-icon [attr.shape]="substep.completed ? 'success-standard' : 'circle'" aria-label="Step Status"></cds-icon>
+                  <button *ngIf="!substep.completed && isFirstUncompletedStep(i)" class="btn btn-sm" (click)="completeSubstep(i, j)">Complete</button>
+                </div>
+              </li>
+            </ul>
+
+          </li>
+        </ul>
+    </div>
+</div>
+
